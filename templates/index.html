@@ -6,10 +6,10 @@
 {% if logged_in %}<form action="/moderate" method="POST">{% endif %}
 {% for name, date, entry in entries %}
 <p>{{ entry }}</p>
-<p>&mdash;<em>{{ name }}</em> on {{ date }}</p>
+<p>&mdash;<em>{{ name }}</em> on {{ date.strftime('%d %b %Y %H:%M') }}</p>
 {% if logged_in -%}
   <p>
-    {% with name = "remove_%d" % loop.index0 -%}
+    {% with name = "delete_%d" % loop.index0 -%}
     <input type="checkbox" id="{{ name }}" name="{{ name }}" value="yes">
     <label for="{{ name }}">Remove this entry</label>
     {%- endwith %}
@@ -17,8 +17,8 @@
 {%- endif %}
 <hr>
 {% endfor %}
-{% if logged_in %}</form>{% endif %}
-{% endwith %}
+{% if logged_in %}<p><input type="submit" value="Delete Selected"></p></form>{% endif %}
+
 
 <form action="/submit" method="POST">
   <p>Submit an entry!</p>
@@ -26,4 +26,8 @@
   <textarea name="entry" rows="10" cols="80"></textarea>
   <p><input type="submit" value="Submit"></p>
 </form>
+
+{% if not logged_in %}<p><a href="admin">Admin Login</a></p>{% endif %}
+{% endwith %}
+
 {% endblock %}
